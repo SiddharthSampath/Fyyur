@@ -1,0 +1,7 @@
+Artists -> Shows <- Venues
+similar to order, order_items, products
+many to many relationship
+
+artist -> venue 1 to many
+
+
