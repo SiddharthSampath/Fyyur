@@ -5,6 +5,8 @@
 	<div class="col-sm-6">
 		<h1 class="monospace">
 			{{ venue.name }}
+			<a href="/venues/{{venue.id}}/edit"><button class="btn btn-primary btn-lg">Edit Venue</button></a>
+			
 		</h1>
 		<p class="subtitle">
 			ID: {{ venue.id }}
@@ -43,6 +45,10 @@
 		{% endif %}
 	</div>
 	<div class="col-sm-6">
+		<form class='monospace' action="{{url_for('delete_venue',venue_id=venue.id)}}" method="DELETE">
+				
+			<input type="submit" class="btn btn-primary btn-lg" value="Delete Venue" style="margin-top:1em;margin-bottom: 1em;">
+		</form>
 		<img src="{{ venue.image_link }}" alt="Venue Image" />
 	</div>
 </div>

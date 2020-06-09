@@ -1,0 +1,14 @@
+{% extends 'layouts/main.html' %}
+{% block title %}Search Venue{% endblock %}
+{% block content %}
+  <div class="form-wrapper">
+    <form method="post" class="form">
+      <h3 class="form-heading">Search for a venue</h3>
+      <div class="form-group">
+        <label for="name">Venue Name</label>
+        {{ form.name(class_ = 'form-control', placeholder="Enter venue to search for", autofocus = true) }}
+      </div>
+      <input type="submit" value="Search" class="btn btn-primary btn-lg btn-block">
+    </form>
+  </div>
+{% endblock %}

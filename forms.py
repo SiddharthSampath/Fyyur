@@ -1,7 +1,8 @@
 from datetime import datetime
 from flask_wtf import Form
-from wtforms import StringField, SelectField, SelectMultipleField, DateTimeField, BooleanField
+from wtforms import StringField, SelectField, SelectMultipleField, DateTimeField, BooleanField, ValidationError
 from wtforms.validators import DataRequired, AnyOf, URL
+import re
 
 class ShowForm(Form):
     artist_id = StringField(
@@ -16,7 +17,9 @@ class ShowForm(Form):
         default= datetime.today()
     )
 
+
 class VenueForm(Form):
+    
     name = StringField(
         'name', validators=[DataRequired()]
     )
@@ -83,17 +86,17 @@ class VenueForm(Form):
         'address', validators=[DataRequired()]
     )
     phone = StringField(
-        'phone'
+        'phone', validators=[DataRequired()]
     )
     image_link = StringField(
-        'image_link'
+        'image_link', validators=[DataRequired()]
     )
     
     facebook_link = StringField(
-        'facebook_link', validators=[URL()]
+        'facebook_link', validators=[URL(),DataRequired()]
     )
     website = StringField(
-        'website', validators=[URL()]
+        'website', validators=[URL(),DataRequired()]
     )
     seeking_talent = BooleanField(
         'seeking_talent'
@@ -202,4 +205,33 @@ class ArtistForm(Form):
         'facebook_link', validators=[URL()]
     )
 
+    website = StringField(
+        'website', validators=[URL()]
+    )
+    seeking_venue = BooleanField(
+        'seeking_venue'
+    )
+    seeking_description = StringField(
+        'seeking_description'
+    )
+
 # TODO IMPLEMENT NEW ARTIST FORM AND NEW SHOW FORM
+class ArtistSearchForm(Form):
+    name = StringField(
+        'name', validators=[DataRequired()]
+    )
+
+class VenueSearchForm(Form):
+    name = StringField(
+        'name', validators=[DataRequired()]
+    )
+
+class ShowSearchForm(Form):
+    artist_id = StringField(
+        'artist_id'
+    )
+    venue_id = StringField(
+        'venue_id'
+    )
+    
+    

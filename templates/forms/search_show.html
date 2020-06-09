@@ -1,0 +1,18 @@
+{% extends 'layouts/main.html' %}
+{% block title %}Search Show{% endblock %}
+{% block content %}
+  <div class="form-wrapper">
+    <form method="post" class="form">
+      <h3 class="form-heading">Search for a show</h3>
+      <div class="form-group">
+        <label for="name">Artist ID</label>
+        {{ form.artist_id(class_ = 'form-control', placeholder="Enter Artist ID", autofocus = true) }}
+      </div>
+      <div class="form-group">
+        <label for="name">Venue ID</label>
+        {{ form.venue_id(class_ = 'form-control', placeholder="Enter Venue ID", autofocus = true) }}
+      </div>
+      <input type="submit" value="Search" class="btn btn-primary btn-lg btn-block">
+    </form>
+  </div>
+{% endblock %}
