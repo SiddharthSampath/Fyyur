@@ -4,6 +4,10 @@ from wtforms import StringField, SelectField, SelectMultipleField, DateTimeField
 from wtforms.validators import DataRequired, AnyOf, URL
 import re
 
+def validate_phone(form, field):
+        if not re.search(r"^[0-9]{3}-[0-9]{3}-[0-9]{4}$", field.data):
+            raise ValidationError("Invalid phone number.")
+
 class ShowForm(Form):
     artist_id = StringField(
         'artist_id'
@@ -19,6 +23,7 @@ class ShowForm(Form):
 
 
 class VenueForm(Form):
+    
     
     name = StringField(
         'name', validators=[DataRequired()]
@@ -86,14 +91,38 @@ class VenueForm(Form):
         'address', validators=[DataRequired()]
     )
     phone = StringField(
-        'phone', validators=[DataRequired()]
+        'phone', validators=[validate_phone]
     )
     image_link = StringField(
         'image_link', validators=[DataRequired()]
     )
-    
+    genres = SelectMultipleField(
+        # TODO implement enum restriction
+        'genres', validators=[DataRequired()],
+        choices=[
+            ('Alternative', 'Alternative'),
+            ('Blues', 'Blues'),
+            ('Classical', 'Classical'),
+            ('Country', 'Country'),
+            ('Electronic', 'Electronic'),
+            ('Folk', 'Folk'),
+            ('Funk', 'Funk'),
+            ('Hip-Hop', 'Hip-Hop'),
+            ('Heavy Metal', 'Heavy Metal'),
+            ('Instrumental', 'Instrumental'),
+            ('Jazz', 'Jazz'),
+            ('Musical Theatre', 'Musical Theatre'),
+            ('Pop', 'Pop'),
+            ('Punk', 'Punk'),
+            ('R&B', 'R&B'),
+            ('Reggae', 'Reggae'),
+            ('Rock n Roll', 'Rock n Roll'),
+            ('Soul', 'Soul'),
+            ('Other', 'Other'),
+        ]
+    )
     facebook_link = StringField(
-        'facebook_link', validators=[URL(),DataRequired()]
+        'facebook_link', validators=[URL(message="Invalid URL"),DataRequired()]
     )
     website = StringField(
         'website', validators=[URL(),DataRequired()]

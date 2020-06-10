@@ -15,16 +15,17 @@ from forms import *
 from flask_migrate import Migrate
 import sys
 from datetime import datetime
+# from config import app,db,moment,current_time, migrate
 #----------------------------------------------------------------------------#
 # App Config.
 #----------------------------------------------------------------------------#
-
 app = Flask(__name__)
 moment = Moment(app)
 app.config.from_object('config')
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 current_time = datetime.now().strftime(('%Y-%m-%d %H:%M:%S'))
+
 
 # TODO: connect to a local postgresql database
 
@@ -45,6 +46,7 @@ class Venue(db.Model):
     city = db.Column(db.String(120))
     state = db.Column(db.String(120))
     address = db.Column(db.String(120))
+    genres = db.Column(db.ARRAY(db.String(120)))
     phone = db.Column(db.String(120))
     image_link = db.Column(db.String(500))
     facebook_link = db.Column(db.String(120))
@@ -65,7 +67,7 @@ class Artist(db.Model):
     city = db.Column(db.String(120))
     state = db.Column(db.String(120))
     phone = db.Column(db.String(120))
-    genres = db.Column(db.String(120))
+    genres = db.Column(db.ARRAY(db.String(120)))
     image_link = db.Column(db.String(500))
     facebook_link = db.Column(db.String(120))
     website = db.Column(db.String(120))
@@ -233,6 +235,7 @@ def create_venue_submission():
     venue_address = request.form['address']
     venue_phone = request.form['phone']
     venue_fb = request.form['facebook_link']
+    venue_genres = request.form.getlist('genres')
     venue_web = request.form['website']
     image_link = request.form['image_link']
     seeking_talent = request.form.get('seeking_talent', False)
@@ -244,7 +247,7 @@ def create_venue_submission():
     if description is None:
       description = "No description"
     
-    venue = Venue(name=venue_name, city=venue_city, state=venue_state,image_link=image_link, address= venue_address, phone=venue_phone, facebook_link=venue_fb, website=venue_web, seeking_talent=seeking_talent, seeking_description=description)
+    venue = Venue(name=venue_name, city=venue_city, state=venue_state,image_link=image_link, genres=venue_genres,address= venue_address, phone=venue_phone, facebook_link=venue_fb, website=venue_web, seeking_talent=seeking_talent, seeking_description=description)
     db.session.add(venue)
     db.session.commit()
   except Exception as e:
@@ -392,7 +395,7 @@ def edit_artist_submission(artist_id):
     artist.city = request.form['city']
     artist.state = request.form['state']
     artist.phone = request.form['phone']
-    artist.genres = request.form['genres']
+    artist.genres = request.form.getlist('genres')
     artist.image_link = request.form['image_link']
     artist.facebook_link = request.form['facebook_link']
     artist.website = request.form['website']
@@ -451,6 +454,7 @@ def edit_venue_submission(venue_id):
     venue.state = request.form['state']
     venue.address = request.form['address']
     venue.phone = request.form['phone']
+    venue.genres = request.form.getlist('genres')
     venue.facebook_link = request.form['facebook_link']
     venue.website = request.form['website']
     venue.image_link = request.form['image_link']
@@ -501,13 +505,13 @@ def create_artist_submission():
     city = request.form['city']
     state = request.form['state']
     phone = request.form['phone']
-    genre = request.form['genres']
+    genre = request.form.getlist('genres')
     image = request.form['image_link']
     fb = request.form['facebook_link']
     website = request.form['website']
     seeking_venue = request.form.get('seeking_venue', False)
     venue_description = request.form.get('seeking_description', None)
-    
+    print(genre)
     if seeking_venue == 'y':
       seeking_venue = True
     else:
@@ -533,7 +537,7 @@ def create_artist_submission():
   
   else:
   # on successful db insert, flash success
-    flash('Artist ' + request.form['name'] + ' was successfully listed!' + genre)
+    flash('Artist ' + request.form['name'] + ' was successfully listed!')
   
   return render_template('pages/home.html')
 
